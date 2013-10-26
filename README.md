@@ -1,4 +1,4 @@
-# grunt-har-gen
+# grunt-har-gen [![Build Status](https://travis-ci.org/jrcryer/grunt-har-gen.png?branch=master)](https://travis-ci.org/jrcryer/grunt-har-gen)
 
 > Grunt plugin for generating HAR files from a series of URLs
 
