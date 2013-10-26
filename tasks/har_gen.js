@@ -11,7 +11,9 @@
 module.exports = function(grunt) {
 
   var exec = require('child_process').exec,
-      _ = grunt.util._;
+      path = require('path'),
+      _ = grunt.util._,
+      script  = path.resolve(path.resolve(__dirname, 'lib/netsniff.js'));
 
   grunt.registerMultiTask('hargen', 'Grunt plugin for generating HAR files from a series of URLs', function() {
 
@@ -29,7 +31,7 @@ module.exports = function(grunt) {
       var filename = _.head(pair);
       var url      = _.last(pair);
 
-      var cmd = 'phantomjs node_modules/grunt-har-gen/tasks/lib/netsniff.js ' + url;
+      var cmd = 'phantomjs ' + script + ' ' + url;
       grunt.log.writeln('Trying: ' + url);
 
       var cp = exec(cmd, {maxBuffer: 1024 * 1024}, function (err, stdout, stderr) {
