@@ -26,10 +26,18 @@ In your project's Gruntfile, add a section named `hargen` to the data object pas
 grunt.initConfig({
   hargen: {
     options: {
-      // Task-specific options go here.
+      urls: {
+        'google_com.har': 'http://www.google.com',
+      },
+      output: './tmp/test'
     },
     your_target: {
-      // Target-specific file lists and/or options go here.
+      urls: {
+        'google_com.har': 'http://www.google.com',
+        'google_fr.har': 'http://www.google.fr',
+        'google_com.har': 'http://www.google.com'
+      },
+      output: './tmp/test'
     },
   },
 })
@@ -37,47 +45,49 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.urls
+Type: `Object`
+Default value: `{}`
+
+An object that represents a hash of filenames and URLs.  The object keys is the filenames.  The object values are the URLs.
+
+#### options.output
 Type: `String`
-Default value: `',  '`
+Default value: `'./tmp'`
 
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
+A string for the path to the folder that the HAR files will be generated.
 
 ### Usage Examples
 
 #### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
-```js
-grunt.initConfig({
-  hargen: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-})
-```
-
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+In this example, the default options are used to generate HAR files in the `tmp` folder
 
 ```js
 grunt.initConfig({
   hargen: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
+      urls: {
+        'google_com.har': 'http://www.google.com',
+      },
+    }
+  },
+})
+```
+
+#### Setting the output 
+In this example, options are used to generate HAR files in the `./performance/reports` folder
+
+```js
+grunt.initConfig({
+  hargen: {
+    options: {
+      urls: {
+        'google_uk.har': 'http://www.gogle.co.uk',
+        'google_fr.har': 'http://www.google.fr',
+        'google_com.har': 'http://www.google.com'
+      },
+      output: './performance/reports'
+    }
   },
 })
 ```
