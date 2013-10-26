@@ -30,18 +30,27 @@ exports.har_gen = {
   default_options: function(test) {
     test.expect(1);
 
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
+    var actual = grunt.file.readJSON('tmp/google_com.har').log.pages.length;
+    var expected = 1;
+    test.equal(actual, expected, 'should have a page');
 
     test.done();
   },
-  custom_options: function(test) {
+  output_options: function(test) {
     test.expect(1);
 
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
+    var actual   = grunt.file.readJSON('tmp/test/google_com.har').log.pages.length;
+    var expected = 1;
+    test.equal(actual, expected, 'should have a page in specific directory');
+
+    test.done();
+  },
+  multiple_options: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.expand('tmp/multiple/*.har').length;
+    var expected = 3;
+    test.equal(actual, expected, 'should have multiple HAR files.');
 
     test.done();
   },

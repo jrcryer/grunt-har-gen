@@ -10,41 +10,41 @@
 
 module.exports = function(grunt) {
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
+  var exec = require('child_process').exec,
+      _ = grunt.util._;
 
-  grunt.registerMultiTask('har_gen', 'Grunt plugin for generating HAR files from a series of URLs', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
+  grunt.registerMultiTask('hargen', 'Grunt plugin for generating HAR files from a series of URLs', function() {
+
     var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
+      urls: {},
+      output: './tmp'
+    }),
+    urls  = _.pairs(options.urls),
+    count = urls.length,
+    index = 0,
+    dir   = options.output,
+    done  = this.async();
 
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
+    urls.forEach(function(pair) {
+      var filename = _.head(pair);
+      var url      = _.last(pair);
+
+      var cmd = 'phantomjs tasks/lib/netsniff.js ' + url;
+      grunt.log.writeln('Trying: ' + url);
+
+      var cp = exec(cmd, [], function (err, stdout) {
+        if (err) {
+          grunt.log.errorlns('Failed to connect to: ' + url);
+        }else {
+          grunt.log.writeln('Saving results to: ' + dir + '/' + filename);
+          grunt.file.write(dir + '/' + filename, stdout);
         }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+        index++;
 
-      // Handle options.
-      src += options.punctuation;
-
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
-
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
+        if (index === count) {
+          done();
+        }
+      });
     });
   });
-
 };

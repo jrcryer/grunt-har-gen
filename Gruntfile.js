@@ -29,23 +29,32 @@ module.exports = function(grunt) {
     },
 
     // Configuration to be run (and then tested).
-    har_gen: {
+    hargen: {
       default_options: {
         options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
+          urls: {
+            'google_com.har': 'http://www.google.com',
+          }
+        }
       },
-      custom_options: {
+      path_options: {
         options: {
-          separator: ': ',
-          punctuation: ' !!!',
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
+          urls: {
+            'google_com.har': 'http://www.google.com',
+          },
+          output: './tmp/test'
+        }
       },
+      multiple_urls_options: {
+        options: {
+          urls: {
+            'google_uk.har': 'http://www.gogle.co.uk',
+            'google_fr.har': 'http://www.google.fr',
+            'google_com.har': 'http://www.google.com',
+          },
+          output: './tmp/multiple'
+        }
+      }
     },
 
     // Unit tests.
@@ -65,7 +74,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'har_gen', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'hargen', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);

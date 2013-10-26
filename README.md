@@ -17,14 +17,14 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-har-gen');
 ```
 
-## The "har_gen" task
+## The "hargen" task
 
 ### Overview
-In your project's Gruntfile, add a section named `har_gen` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `hargen` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
-  har_gen: {
+  hargen: {
     options: {
       // Task-specific options go here.
     },
@@ -56,7 +56,7 @@ In this example, the default options are used to do something with whatever. So 
 
 ```js
 grunt.initConfig({
-  har_gen: {
+  hargen: {
     options: {},
     files: {
       'dest/default_options': ['src/testing', 'src/123'],
@@ -70,7 +70,7 @@ In this example, custom options are used to do something else with whatever else
 
 ```js
 grunt.initConfig({
-  har_gen: {
+  hargen: {
     options: {
       separator: ': ',
       punctuation: ' !!!',
