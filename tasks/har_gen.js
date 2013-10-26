@@ -32,9 +32,10 @@ module.exports = function(grunt) {
       var cmd = 'phantomjs tasks/lib/netsniff.js ' + url;
       grunt.log.writeln('Trying: ' + url);
 
-      var cp = exec(cmd, [], function (err, stdout) {
+      var cp = exec(cmd, {maxBuffer: 1024 * 1024}, function (err, stdout, stderr) {
         if (err) {
           grunt.log.errorlns('Failed to connect to: ' + url);
+          grunt.log.verbose(stderr);
         }else {
           grunt.log.writeln('Saving results to: ' + dir + '/' + filename);
           grunt.file.write(dir + '/' + filename, stdout);

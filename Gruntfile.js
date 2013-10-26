@@ -50,7 +50,7 @@ module.exports = function(grunt) {
           urls: {
             'google_uk.har': 'http://www.gogle.co.uk',
             'google_fr.har': 'http://www.google.fr',
-            'google_com.har': 'http://www.google.com',
+            'google_com.har': 'http://www.google.com'
           },
           output: './tmp/multiple'
         }
