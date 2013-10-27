@@ -1,7 +1,7 @@
 {
   "name": "grunt-har-gen",
   "description": "Grunt plugin for generating HAR files from a series of URLs",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "homepage": "https://github.com/jrcryer/grunt-har-gen",
   "author": {
     "name": "James Cryer",
@@ -38,7 +38,12 @@
     "grunt": "~0.4.1"
   },
   "keywords": [
-    "gruntplugin har performance ci webpref pagespeed"
+    "gruntplugin",
+    "HAR",
+    "Performance",
+    "CI",
+    "webpref",
+    "pagespeed"
   ],
   "dependencies": {
     "grunt-lib-phantomjs": "~0.4.0"
