@@ -31,7 +31,7 @@ module.exports = function(grunt) {
       var filename = _.head(pair);
       var url      = _.last(pair);
 
-      var cmd = 'phantomjs ' + script + ' ' + url;
+      var cmd = './node_modules/grunt-lib-phantomjs/node_modules/.bin/phantomjs ' + script + ' ' + url;
       grunt.log.writeln('Trying: ' + url);
 
       var cp = exec(cmd, {maxBuffer: 1024 * 1024}, function (err, stdout, stderr) {
