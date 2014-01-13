@@ -49,5 +49,10 @@ module.exports = function(grunt) {
         }
       });
     });
+
+    if (0 === urls.length) {
+      grunt.log.error('No urls specified');
+      done(false);
+    }
   });
 };
