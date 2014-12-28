@@ -32,12 +32,14 @@ grunt.initConfig({
       output: './tmp/test'
     },
     your_target: {
-      urls: {
-        'google_com.har': 'http://www.google.com',
-        'google_fr.har': 'http://www.google.fr',
-        'google_com.har': 'http://www.google.com'
-      },
-      output: './tmp/test'
+      options: {
+        urls: {
+          'google_com.har': 'http://www.google.com',
+          'google_fr.har': 'http://www.google.fr',
+          'google_com.har': 'http://www.google.com'
+        },
+        output: './tmp/test'
+      }
     },
   },
 })
