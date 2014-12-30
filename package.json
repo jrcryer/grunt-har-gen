@@ -46,7 +46,8 @@
     "pagespeed"
   ],
   "dependencies": {
+    "async": "^0.9.0",
     "lodash": "^2.4.1",
-    "grunt-lib-phantomjs": "~0.4.0"
+    "phantomjs": "^1.9.13"
   }
 }

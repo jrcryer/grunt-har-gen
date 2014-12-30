@@ -8,47 +8,44 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
-  var exec    = require('child_process').exec,
-      path    = require('path'),
-      _       = require('lodash'),
-      script  = path.resolve(path.resolve(__dirname, 'lib/netsniff.js'));
+  var _ = require('lodash'),
+      async = require('async'),
+      exec = require('child_process').execFile,
+      path = require('path'),
+      phantomjs = require('phantomjs'),
+      asset = path.join.bind(null, __dirname, '..'),
+      netsniff = asset('lib/netsniff.js');
 
-  grunt.registerMultiTask('hargen', 'Grunt plugin for generating HAR files from a series of URLs', function() {
+  grunt.registerMultiTask('hargen', 'Grunt plugin for generating HAR files from a series of URLs', function () {
 
     var options = this.options({
-      urls: {},
-      output: './tmp'
-    }),
-    urls  = _.pairs(options.urls),
-    count = urls.length,
-    index = 0,
-    dir   = options.output,
-    done  = this.async();
+          urls:          {},
+          output:        './tmp'
+        }),
+        urls = _.pairs(options.urls),
+        dir = options.output,
+        done = this.async();
 
-    urls.forEach(function(pair) {
-      var filename = _.head(pair);
-      var url      = _.last(pair);
+    async.forEachSeries(urls, function (pair, next) {
+      var filename = pair[0],
+          url = pair[1];
 
-      var cmd = './node_modules/grunt-lib-phantomjs/node_modules/.bin/phantomjs ' + script + ' ' + url;
       grunt.log.writeln('Trying: ' + url);
 
-      var cp = exec(cmd, {maxBuffer: 1024 * 1024}, function (err, stdout, stderr) {
+      exec(phantomjs.path, [netsniff, url], {maxBuffer: 1024 * 1024}, function (err, stdout, stderr) {
         if (err) {
           grunt.log.errorlns('Failed to connect to: ' + url);
           grunt.verbose.writeln(stderr);
-        }else {
+        } else {
           grunt.log.writeln('Saving results to: ' + dir + '/' + filename);
           grunt.file.write(dir + '/' + filename, stdout);
         }
-        index++;
 
-        if (index === count) {
-          done();
-        }
+        next();
       });
-    });
+    }, done);
 
     if (0 === urls.length) {
       grunt.log.error('No urls specified');
