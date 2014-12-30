@@ -10,9 +10,9 @@
 
 module.exports = function(grunt) {
 
-  var exec = require('child_process').exec,
-      path = require('path'),
-      _ = grunt.util._,
+  var exec    = require('child_process').exec,
+      path    = require('path'),
+      _       = require('lodash'),
       script  = path.resolve(path.resolve(__dirname, 'lib/netsniff.js'));
 
   grunt.registerMultiTask('hargen', 'Grunt plugin for generating HAR files from a series of URLs', function() {
