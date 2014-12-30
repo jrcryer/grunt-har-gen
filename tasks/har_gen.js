@@ -24,7 +24,8 @@ module.exports = function (grunt) {
     function () {
       var options = this.options({
             urls:   {},
-            output: './tmp'
+            output: './tmp',
+            args: []
           }),
           urls = _.pairs(options.urls),
           dir = options.output,
@@ -32,11 +33,12 @@ module.exports = function (grunt) {
 
       async.forEach(urls, function (pair, next) {
         var filename = pair[0],
-            url = pair[1];
+            url = pair[1],
+            args = options.args.concat([netsniff, url]);
 
         grunt.log.writeln('Trying: ' + url);
 
-        var process = spawn(phantomjs.path, [netsniff, url], {
+        var process = spawn(phantomjs.path, args, {
           stdio: [
             'ignore',
             fs.openSync(dir + '/' + filename, 'w'),
