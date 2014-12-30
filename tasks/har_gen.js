@@ -12,44 +12,54 @@ module.exports = function (grunt) {
 
   var _ = require('lodash'),
       async = require('async'),
-      exec = require('child_process').execFile,
+      spawn = require('child_process').spawn,
+      fs = require('fs'),
       path = require('path'),
       phantomjs = require('phantomjs'),
       asset = path.join.bind(null, __dirname, '..'),
       netsniff = asset('lib/netsniff.js');
 
-  grunt.registerMultiTask('hargen', 'Grunt plugin for generating HAR files from a series of URLs', function () {
+  grunt.registerMultiTask(
+    'hargen', 'Grunt plugin for generating HAR files from a series of URLs',
+    function () {
+      var options = this.options({
+            urls:   {},
+            output: './tmp'
+          }),
+          urls = _.pairs(options.urls),
+          dir = options.output,
+          done = this.async();
 
-    var options = this.options({
-          urls:          {},
-          output:        './tmp'
-        }),
-        urls = _.pairs(options.urls),
-        dir = options.output,
-        done = this.async();
+      async.forEach(urls, function (pair, next) {
+        var filename = pair[0],
+            url = pair[1];
 
-    async.forEachSeries(urls, function (pair, next) {
-      var filename = pair[0],
-          url = pair[1];
+        grunt.log.writeln('Trying: ' + url);
 
-      grunt.log.writeln('Trying: ' + url);
+        var process = spawn(phantomjs.path, [netsniff, url], {
+          stdio: [
+            'ignore',
+            fs.openSync(dir + '/' + filename, 'w'),
+            'pipe'
+          ]
+        });
 
-      exec(phantomjs.path, [netsniff, url], {maxBuffer: 1024 * 1024}, function (err, stdout, stderr) {
-        if (err) {
-          grunt.log.errorlns('Failed to connect to: ' + url);
-          grunt.verbose.writeln(stderr);
-        } else {
-          grunt.log.writeln('Saving results to: ' + dir + '/' + filename);
-          grunt.file.write(dir + '/' + filename, stdout);
-        }
-
-        next();
+        process.on('close', function (code) {
+          if (code !== 0) {
+            grunt.log.errorlns('Failed to connect to: ' + url);
+            next(code);
+          } else {
+            grunt.log.writeln('Saved results to: ' + dir + '/' + filename);
+            next();
+          }
+        })
+      }, function (err) {
+        done(!err);
       });
-    }, done);
 
-    if (0 === urls.length) {
-      grunt.log.error('No urls specified');
-      done(false);
-    }
-  });
+      if (0 === urls.length) {
+        grunt.log.error('No urls specified');
+        done(false);
+      }
+    });
 };
