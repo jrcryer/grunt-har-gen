@@ -31,6 +31,8 @@ module.exports = function (grunt) {
           dir = options.output,
           done = this.async();
 
+      grunt.file.mkdir(dir);
+
       async.forEach(urls, function (pair, next) {
         var filename = pair[0],
             url = pair[1],
